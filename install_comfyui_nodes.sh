@@ -33,6 +33,9 @@ git clone https://github.com/11cafe/comfyui-workspace-manager
 echo "Installing ComfyUI-WebhookNotifier..."
 git clone https://github.com/iSuneast/ComfyUI-WebhookNotifier.git
 
+echo "Installing ComfyUI-Crystools..."
+git clone https://github.com/crystian/ComfyUI-Crystools.git
+
 # Install required dependencies
 echo "Installing dependencies..."
 if [ -f "$CUSTOM_NODES_DIR/ComfyUI-Manager/requirements.txt" ]; then
@@ -45,6 +48,10 @@ fi
 
 if [ -f "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt" ]; then
     pip install -r "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt"
+fi
+
+if [ -f "$CUSTOM_NODES_DIR/ComfyUI-Crystools/requirements.txt" ]; then
+    pip install -r "$CUSTOM_NODES_DIR/ComfyUI-Crystools/requirements.txt"
 fi
 
 echo "ComfyUI custom nodes installation completed!"
