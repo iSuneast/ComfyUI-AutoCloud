@@ -47,9 +47,5 @@ if [ -f "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt" ]; then
     pip install -r "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt"
 fi
 
-# Restart ComfyUI service
-echo "Restarting ComfyUI service..."
-sudo systemctl restart comfyui
-
 echo "ComfyUI custom nodes installation completed!"
 echo "Please visit ComfyUI in your browser to confirm successful installation" 
