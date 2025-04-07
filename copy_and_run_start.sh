@@ -31,8 +31,8 @@ echo "Making script executable..."
 chmod +x "$COMFYUI_DIR/start.sh"
 
 # Run the script
-echo "Running start.sh..."
+echo "Running start.sh in background mode..."
 cd "$COMFYUI_DIR"
-./start.sh
+nohup ./start.sh > /dev/null 2>&1 &
 
-echo "Script execution completed!" 
+echo "Script execution completed and ComfyUI is running in the background!" 
