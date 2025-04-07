@@ -23,36 +23,33 @@ cd "$CUSTOM_NODES_DIR"
 # Activate virtual environment
 source "$COMFYUI_DIR/venv/bin/activate"
 
-# Install custom nodes
-echo "Installing ComfyUI-Manager..."
-git clone https://github.com/ltdrdata/ComfyUI-Manager
+# Function to install or update a custom node
+install_or_update_node() {
+    local node_dir="$1"
+    local repo_url="$2"
+    
+    echo "Installing/Updating $node_dir..."
+    if [ -d "$CUSTOM_NODES_DIR/$node_dir" ]; then
+        echo "$node_dir already exists, updating..."
+        cd "$CUSTOM_NODES_DIR/$node_dir"
+        git pull
+        cd "$CUSTOM_NODES_DIR"
+    else
+        git clone "$repo_url"
+    fi
+    
+    # Install dependencies if requirements.txt exists
+    if [ -f "$CUSTOM_NODES_DIR/$node_dir/requirements.txt" ]; then
+        echo "Installing dependencies for $node_dir..."
+        pip install -r "$CUSTOM_NODES_DIR/$node_dir/requirements.txt"
+    fi
+}
 
-echo "Installing comfyui-workspace-manager..."
-git clone https://github.com/11cafe/comfyui-workspace-manager
-
-echo "Installing ComfyUI-WebhookNotifier..."
-git clone https://github.com/iSuneast/ComfyUI-WebhookNotifier.git
-
-echo "Installing ComfyUI-Crystools..."
-git clone https://github.com/crystian/ComfyUI-Crystools.git
-
-# Install required dependencies
-echo "Installing dependencies..."
-if [ -f "$CUSTOM_NODES_DIR/ComfyUI-Manager/requirements.txt" ]; then
-    pip install -r "$CUSTOM_NODES_DIR/ComfyUI-Manager/requirements.txt"
-fi
-
-if [ -f "$CUSTOM_NODES_DIR/comfyui-workspace-manager/requirements.txt" ]; then
-    pip install -r "$CUSTOM_NODES_DIR/comfyui-workspace-manager/requirements.txt"
-fi
-
-if [ -f "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt" ]; then
-    pip install -r "$CUSTOM_NODES_DIR/ComfyUI-WebhookNotifier/requirements.txt"
-fi
-
-if [ -f "$CUSTOM_NODES_DIR/ComfyUI-Crystools/requirements.txt" ]; then
-    pip install -r "$CUSTOM_NODES_DIR/ComfyUI-Crystools/requirements.txt"
-fi
+# Install or update custom nodes
+install_or_update_node "ComfyUI-Manager" "https://github.com/ltdrdata/ComfyUI-Manager"
+install_or_update_node "comfyui-workspace-manager" "https://github.com/11cafe/comfyui-workspace-manager"
+install_or_update_node "ComfyUI-WebhookNotifier" "https://github.com/iSuneast/ComfyUI-WebhookNotifier.git"
+install_or_update_node "ComfyUI-Crystools" "https://github.com/crystian/ComfyUI-Crystools.git"
 
 echo "ComfyUI custom nodes installation completed!"
 echo "Please visit ComfyUI in your browser to confirm successful installation" 
