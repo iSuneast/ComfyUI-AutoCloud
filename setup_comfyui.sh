@@ -3,29 +3,34 @@
 # Stop execution on error
 set -e
 
-echo "Starting ComfyUI service installation..."
+# Set log file
+LOG_FILE="/tmp/comfyui_setup.log"
 
-# Set installation directory to Home directory
-INSTALL_DIR="$HOME"
-cd $INSTALL_DIR
+# Function to run the installation process
+run_installation() {
+    echo "Starting ComfyUI service installation..." | tee -a $LOG_FILE
 
-# Clone ComfyUI repository
-echo "Cloning ComfyUI repository..."
-git clone https://github.com/comfyanonymous/ComfyUI.git
-cd ComfyUI
+    # Set installation directory to Home directory
+    INSTALL_DIR="$HOME"
+    cd $INSTALL_DIR
 
-# Create and activate virtual environment
-echo "Setting up Python virtual environment..."
-python3 -m venv venv
-source venv/bin/activate
+    # Clone ComfyUI repository
+    echo "Cloning ComfyUI repository..." | tee -a $LOG_FILE
+    git clone https://github.com/comfyanonymous/ComfyUI.git >> $LOG_FILE 2>&1
+    cd ComfyUI
 
-# Install ComfyUI dependencies
-echo "Installing ComfyUI dependencies..."
-pip install -r requirements.txt
+    # Create and activate virtual environment
+    echo "Setting up Python virtual environment..." | tee -a $LOG_FILE
+    python3 -m venv venv >> $LOG_FILE 2>&1
+    source venv/bin/activate
 
-# Configure ComfyUI as a system service
-echo "Configuring ComfyUI as a system service..."
-sudo bash -c "cat > /etc/systemd/system/comfyui.service << EOL
+    # Install ComfyUI dependencies
+    echo "Installing ComfyUI dependencies..." | tee -a $LOG_FILE
+    pip install -r requirements.txt >> $LOG_FILE 2>&1
+
+    # Configure ComfyUI as a system service
+    echo "Configuring ComfyUI as a system service..." | tee -a $LOG_FILE
+    sudo bash -c "cat > /etc/systemd/system/comfyui.service << EOL
 [Unit]
 Description=ComfyUI Service
 After=network.target
@@ -40,14 +45,23 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
-EOL"
+EOL" >> $LOG_FILE 2>&1
 
-# Enable and start service
-echo "Enabling and starting ComfyUI service..."
-sudo systemctl daemon-reload
-sudo systemctl enable comfyui
-sudo systemctl start comfyui
+    # Enable and start service
+    echo "Enabling and starting ComfyUI service..." | tee -a $LOG_FILE
+    sudo systemctl daemon-reload >> $LOG_FILE 2>&1
+    sudo systemctl enable comfyui >> $LOG_FILE 2>&1
+    sudo systemctl start comfyui >> $LOG_FILE 2>&1
 
-echo "ComfyUI installation completed, service is running!"
-echo "Access address: http://[YOUR_SERVER_IP]:8188"
-echo "To check service status, run: sudo systemctl status comfyui" 
+    echo "ComfyUI installation completed, service is running!" | tee -a $LOG_FILE
+    echo "Access address: http://[YOUR_SERVER_IP]:8188" | tee -a $LOG_FILE
+    echo "To check service status, run: sudo systemctl status comfyui" | tee -a $LOG_FILE
+}
+
+# Run the installation in the background
+run_installation &
+
+# Display the log in real-time
+echo "ComfyUI installation is running in the background. Displaying logs in real-time:"
+echo "Log file location: $LOG_FILE"
+tail -f $LOG_FILE 
