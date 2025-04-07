@@ -14,10 +14,17 @@ run_installation() {
     INSTALL_DIR="$HOME"
     cd $INSTALL_DIR
 
-    # Clone ComfyUI repository
-    echo "Cloning ComfyUI repository..." | tee -a $LOG_FILE
-    git clone https://github.com/comfyanonymous/ComfyUI.git >> $LOG_FILE 2>&1
-    cd ComfyUI
+    # Check if ComfyUI directory already exists
+    if [ -d "ComfyUI" ]; then
+        echo "ComfyUI already exists. Updating..." | tee -a $LOG_FILE
+        cd ComfyUI
+        git pull >> $LOG_FILE 2>&1
+    else
+        # Clone ComfyUI repository
+        echo "Cloning ComfyUI repository..." | tee -a $LOG_FILE
+        git clone https://github.com/comfyanonymous/ComfyUI.git >> $LOG_FILE 2>&1
+        cd ComfyUI
+    fi
 
     # Create and activate virtual environment
     echo "Setting up Python virtual environment..." | tee -a $LOG_FILE
