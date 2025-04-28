@@ -25,7 +25,15 @@ cleanup_processes() {
 # Function: Start ComfyUI
 start_comfyui() {
     echo "$(date): Starting ComfyUI service..." | tee -a logs/$LOG_FILE
-    source venv/bin/activate
+    if [ -d "venv" ]; then
+        if command -v source >/dev/null 2>&1; then
+            source venv/bin/activate
+        else
+            . venv/bin/activate
+        fi
+    else
+        echo "$(date): Warning: Virtual environment not found, continuing without activation" | tee -a logs/$LOG_FILE
+    fi
     python main.py --listen --disable-metadata >> logs/$LOG_FILE 2>&1
     return $?
 }

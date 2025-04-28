@@ -21,7 +21,7 @@ mkdir -p "$CUSTOM_NODES_DIR"
 cd "$CUSTOM_NODES_DIR"
 
 # Activate virtual environment
-source "$COMFYUI_DIR/venv/bin/activate"
+. "$COMFYUI_DIR/venv/bin/activate"
 
 # Function to install or update a custom node
 install_or_update_node() {

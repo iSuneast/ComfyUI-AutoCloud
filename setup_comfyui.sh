@@ -29,7 +29,7 @@ run_installation() {
     # Create and activate virtual environment
     echo "Setting up Python virtual environment..." | tee -a $LOG_FILE
     python3 -m venv venv >> $LOG_FILE 2>&1
-    source venv/bin/activate
+    . ./venv/bin/activate
 
     # Install ComfyUI dependencies
     echo "Installing ComfyUI dependencies..." | tee -a $LOG_FILE
@@ -37,7 +37,7 @@ run_installation() {
 
     echo "ComfyUI installation completed!" | tee -a $LOG_FILE
     echo "To run ComfyUI, navigate to $INSTALL_DIR/ComfyUI, activate the virtual environment, and run:" | tee -a $LOG_FILE
-    echo "source venv/bin/activate && python main.py --listen 0.0.0.0 --port 8188" | tee -a $LOG_FILE
+    echo ". ./venv/bin/activate && python main.py --listen 0.0.0.0 --port 8188" | tee -a $LOG_FILE
     echo "Access address: http://[YOUR_SERVER_IP]:8188" | tee -a $LOG_FILE
 }
 
