@@ -23,6 +23,10 @@ cd "$CUSTOM_NODES_DIR"
 # Activate virtual environment
 . "$COMFYUI_DIR/venv/bin/activate"
 
+# Update pip to latest version
+echo "Updating pip to latest version..."
+pip install --upgrade pip
+
 # Function to install or update a custom node
 install_or_update_node() {
     local node_dir="$1"
