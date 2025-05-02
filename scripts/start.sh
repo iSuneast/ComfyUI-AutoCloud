@@ -34,7 +34,7 @@ start_comfyui() {
     else
         echo "$(date): Warning: Virtual environment not found, continuing without activation" | tee -a logs/$LOG_FILE
     fi
-    python main.py --listen --disable-metadata >> logs/$LOG_FILE 2>&1
+    python main.py --listen --disable-metadata --disable-smart-memory >> logs/$LOG_FILE 2>&1
     return $?
 }
 
