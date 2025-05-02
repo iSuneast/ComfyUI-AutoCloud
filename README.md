@@ -2,6 +2,8 @@
 
 Automatically deploy ComfyUI on Google Cloud servers.
 
+> **Note**: All code in this project was written by an AI model.
+
 ## Setup Instructions
 
 1. Connect to your Google Cloud server via SSH
