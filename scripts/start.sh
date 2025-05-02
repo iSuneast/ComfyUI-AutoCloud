@@ -17,7 +17,6 @@ mkdir -p logs
 # Function: Clean up existing processes
 cleanup_processes() {
     echo "$(date): Cleaning up existing ComfyUI processes..." | tee -a logs/$LOG_FILE
-    pkill -f pt_main_thread || true
     pkill -f "python main.py" || true
     sleep 2
 }
