@@ -36,5 +36,7 @@ cd "$COMFYUI_DIR"
 nohup ./start.sh > /dev/null 2>&1 &
 
 echo "Script execution completed and ComfyUI is running in the background!"
+echo "Waiting for ComfyUI to start..."
+sleep 1
 echo "Displaying logs (press Ctrl+C to exit log view while keeping ComfyUI running)..."
 tail -f "$COMFYUI_DIR/logs/comfyui_current.log" 
