@@ -3,7 +3,28 @@
 # Stop script execution when an error occurs
 set -e
 
-echo "Starting installation of ComfyUI custom nodes..."
+# Set config directory
+CONFIG_DIR="$(dirname "$0")/config"
+
+# Default config is basic nodes
+CONFIG_FILE="$CONFIG_DIR/basic_nodes.conf"
+
+# Check if a config file was specified as argument
+if [ "$1" != "" ]; then
+    # Check if it's a relative path without directory
+    if [[ "$1" != *"/"* ]]; then
+        CONFIG_FILE="$CONFIG_DIR/$1"
+    else
+        CONFIG_FILE="$1"
+    fi
+    
+    if [ ! -f "$CONFIG_FILE" ]; then
+        echo "Error: Config file not found: $CONFIG_FILE"
+        exit 1
+    fi
+fi
+
+echo "Starting installation of ComfyUI nodes from config: $(basename "$CONFIG_FILE")..."
 
 # Set ComfyUI installation directory
 COMFYUI_DIR="$HOME/ComfyUI"
@@ -49,11 +70,14 @@ install_or_update_node() {
     fi
 }
 
-# Install or update custom nodes
-install_or_update_node "https://github.com/ltdrdata/ComfyUI-Manager"
-install_or_update_node "https://github.com/11cafe/comfyui-workspace-manager"
-install_or_update_node "https://github.com/iSuneast/ComfyUI-WebhookNotifier.git"
-install_or_update_node "https://github.com/crystian/ComfyUI-Crystools.git"
+# Read the config file line by line and install each node
+while IFS= read -r line || [[ -n "$line" ]]; do
+    # Skip empty lines and lines starting with #
+    if [[ -z "$line" || "$line" == \#* ]]; then
+        continue
+    fi
+    install_or_update_node "$line"
+done < "$CONFIG_FILE"
 
-echo "ComfyUI custom nodes installation completed!"
-echo "Please visit ComfyUI in your browser to confirm successful installation" 
+echo "ComfyUI nodes installation completed!"
+echo "Please restart ComfyUI to load the new nodes" 
