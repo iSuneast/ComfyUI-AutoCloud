@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Kill any running start.sh script first
+kill_running_start_scripts() {
+    echo "$(date): Looking for other running start.sh processes..."
+    # Find and kill any other start.sh processes
+    for pid in $(pgrep -f "start.sh" | grep -v $$); do
+        echo "$(date): Killing existing start.sh process with PID: $pid"
+        kill -15 $pid 2>/dev/null || kill -9 $pid 2>/dev/null || true
+    done
+    sleep 2
+}
+
 # Set variables
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="comfyui_${TIMESTAMP}.log"
@@ -127,6 +138,8 @@ manage_logs() {
 # Main function
 main() {
     echo "$(date): Starting ComfyUI monitoring script" | tee -a logs/$LOG_FILE
+    # Kill any running start.sh scripts first
+    kill_running_start_scripts
     manage_logs
     monitor_and_restart
 }
