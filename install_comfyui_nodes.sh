@@ -29,8 +29,8 @@ pip install --upgrade pip
 
 # Function to install or update a custom node
 install_or_update_node() {
-    local node_dir="$1"
-    local repo_url="$2"
+    local repo_url="$1"
+    local node_dir=$(basename "$repo_url" .git)
     
     echo "Installing/Updating $node_dir..."
     if [ -d "$CUSTOM_NODES_DIR/$node_dir" ]; then
@@ -50,10 +50,10 @@ install_or_update_node() {
 }
 
 # Install or update custom nodes
-install_or_update_node "ComfyUI-Manager" "https://github.com/ltdrdata/ComfyUI-Manager"
-install_or_update_node "comfyui-workspace-manager" "https://github.com/11cafe/comfyui-workspace-manager"
-install_or_update_node "ComfyUI-WebhookNotifier" "https://github.com/iSuneast/ComfyUI-WebhookNotifier.git"
-install_or_update_node "ComfyUI-Crystools" "https://github.com/crystian/ComfyUI-Crystools.git"
+install_or_update_node "https://github.com/ltdrdata/ComfyUI-Manager"
+install_or_update_node "https://github.com/11cafe/comfyui-workspace-manager"
+install_or_update_node "https://github.com/iSuneast/ComfyUI-WebhookNotifier.git"
+install_or_update_node "https://github.com/crystian/ComfyUI-Crystools.git"
 
 echo "ComfyUI custom nodes installation completed!"
 echo "Please visit ComfyUI in your browser to confirm successful installation" 
