@@ -61,8 +61,16 @@ monitor_and_restart() {
         
         echo "$(date): ComfyUI started, PID: $pid" | tee -a logs/$LOG_FILE
         
-        # Wait for process to initialize
-        sleep 30
+        # Wait for process to initialize (longer initial wait)
+        echo "$(date): Waiting 120 seconds for ComfyUI to fully initialize..." | tee -a logs/$LOG_FILE
+        sleep 120
+        
+        # Check if service is up after initial wait
+        if check_comfyui_health; then
+            echo "$(date): ComfyUI successfully started and responding" | tee -a logs/$LOG_FILE
+        else
+            echo "$(date): ComfyUI still starting up, will continue monitoring..." | tee -a logs/$LOG_FILE
+        fi
         
         # Monitor process health
         while kill -0 $pid 2>/dev/null; do
