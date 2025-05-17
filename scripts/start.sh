@@ -140,6 +140,8 @@ main() {
     echo "$(date): Starting ComfyUI monitoring script" | tee -a logs/$LOG_FILE
     # Kill any running start.sh scripts first
     kill_running_start_scripts
+    # Clean up existing ComfyUI processes
+    cleanup_processes
     manage_logs
     monitor_and_restart
 }
