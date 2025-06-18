@@ -24,6 +24,9 @@ if [ "$1" != "" ]; then
     fi
 fi
 
+# Convert to absolute path to avoid issues when changing directories later
+CONFIG_FILE=$(realpath "$CONFIG_FILE")
+
 echo "Starting installation of ComfyUI nodes from config: $(basename "$CONFIG_FILE")..."
 
 # Set ComfyUI installation directory
