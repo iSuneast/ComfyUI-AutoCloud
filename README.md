@@ -55,4 +55,55 @@ https://github.com/11cafe/comfyui-workspace-manager
 https://github.com/iSuneast/ComfyUI-WebhookNotifier.git
 ```
 
-可以使用 `#` 添加注释行，空行会被忽略。 
+可以使用 `#` 添加注释行，空行会被忽略。
+
+## HTTP 文件服务器
+
+本项目还提供了一个HTTP文件服务器，可以通过浏览器访问ComfyUI文件夹中的所有文件。
+
+### 快速启动
+
+```bash
+./start_http_server.sh
+```
+
+默认设置下，服务器会在 `http://localhost:8080` 启动，提供对 `~/ComfyUI` 目录的访问。
+
+### 自定义选项
+
+```bash
+# 使用自定义端口
+./start_http_server.sh -p 9000
+
+# 只允许本地访问
+./start_http_server.sh -h 127.0.0.1
+
+# 使用自定义ComfyUI目录
+./start_http_server.sh -d /path/to/your/comfyui
+
+# 查看所有选项
+./start_http_server.sh --help
+```
+
+### 直接使用HTTP服务器脚本
+
+你也可以直接使用完整的HTTP服务器脚本：
+
+```bash
+./scripts/http_server.sh [选项]
+```
+
+### 功能特点
+
+- 🌐 通过浏览器访问ComfyUI文件夹
+- 📁 支持文件和目录浏览
+- ⚙️ 可配置端口和主机地址
+- 🔒 包含安全提示和端口检查
+- 📱 响应式界面，支持移动设备
+- 🐍 使用Python内置HTTP服务器（无需额外依赖）
+
+### 安全提示
+
+- 仅在安全的网络环境中使用
+- 不使用时请及时停止服务器（Ctrl+C）
+- 如需公网访问，请配置适当的防火墙规则 
