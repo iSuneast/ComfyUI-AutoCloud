@@ -6,7 +6,7 @@
 set -e
 
 # Default configuration
-DEFAULT_PORT=8080
+DEFAULT_PORT=8888
 DEFAULT_HOST="0.0.0.0"
 COMFYUI_DIR="$HOME/ComfyUI"
 
@@ -121,37 +121,10 @@ echo ""
 # Change to ComfyUI directory and start server
 cd "$COMFYUI_DIR"
 
-# Create a simple index.html if it doesn't exist
-if [ ! -f "index.html" ]; then
-    cat > index.html << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-    <title>ComfyUI File Browser</title>
-    <meta charset="utf-8">
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #333; }
-        .info { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .warning { background: #fff8dc; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #ffa500; }
-    </style>
-</head>
-<body>
-    <h1>🎨 ComfyUI File Browser</h1>
-    <div class="info">
-        <strong>Welcome to ComfyUI File Server!</strong>
-        <p>You can browse all ComfyUI files and directories from this interface.</p>
-        <p>Use the directory listing below to navigate through your ComfyUI installation.</p>
-    </div>
-    <div class="warning">
-        <strong>Security Notice:</strong> This server provides access to your ComfyUI directory. 
-        Make sure to run it only in a secure environment and stop it when not needed.
-    </div>
-    <hr>
-    <p><a href="./">📁 Browse Files</a></p>
-</body>
-</html>
-EOF
+# Remove any existing index.html that might interfere with directory listing
+if [ -f "index.html" ] && [ ! -s "index.html" ]; then
+    echo "Removing empty index.html to enable directory browsing..."
+    rm -f "index.html"
 fi
 
 # Start the HTTP server
@@ -163,6 +136,10 @@ if [ "$HOST" = "0.0.0.0" ]; then
     echo "  - Network:  http://$(hostname -I | awk '{print $1}'):$PORT"
     echo ""
 fi
+
+echo "Directory listing will be automatically displayed."
+echo "You can browse files and folders directly in your web browser."
+echo ""
 
 # Use Python's built-in HTTP server
 $PYTHON_CMD -m http.server $PORT --bind $HOST 
