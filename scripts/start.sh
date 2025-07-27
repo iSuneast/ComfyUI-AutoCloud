@@ -28,6 +28,42 @@ mkdir -p logs
 # Function: Clean up existing processes
 cleanup_processes() {
     echo "$(date): Cleaning up existing ComfyUI processes..." | tee -a logs/$LOG_FILE
+    
+    # Check if port 8188 is being used
+    echo "$(date): Checking if port $COMFYUI_PORT is in use..." | tee -a logs/$LOG_FILE
+    if lsof -i :$COMFYUI_PORT > /dev/null 2>&1; then
+        echo "$(date): Port $COMFYUI_PORT is occupied, killing processes..." | tee -a logs/$LOG_FILE
+        
+        # Get PIDs of processes using port 8188
+        PIDS=$(lsof -t -i :$COMFYUI_PORT 2>/dev/null || true)
+        
+        for pid in $PIDS; do
+            if [ -n "$pid" ]; then
+                echo "$(date): Killing process $pid occupying port $COMFYUI_PORT" | tee -a logs/$LOG_FILE
+                # Try graceful termination first
+                kill -15 $pid 2>/dev/null || true
+                sleep 2
+                
+                # Check if process is still running
+                if kill -0 $pid 2>/dev/null; then
+                    echo "$(date): Process $pid didn't terminate gracefully, forcing kill..." | tee -a logs/$LOG_FILE
+                    kill -9 $pid 2>/dev/null || true
+                fi
+            fi
+        done
+        
+        # Wait a bit and recheck
+        sleep 2
+        if lsof -i :$COMFYUI_PORT > /dev/null 2>&1; then
+            echo "$(date): Warning: Port $COMFYUI_PORT is still occupied after cleanup" | tee -a logs/$LOG_FILE
+        else
+            echo "$(date): Port $COMFYUI_PORT is now free" | tee -a logs/$LOG_FILE
+        fi
+    else
+        echo "$(date): Port $COMFYUI_PORT is free" | tee -a logs/$LOG_FILE
+    fi
+    
+    # Also clean up any remaining ComfyUI processes
     pkill -f "python main.py" || true
     sleep 2
 }
