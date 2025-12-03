@@ -1,0 +1,53 @@
+# ComfyUI Extra Model Paths Configuration
+# ComfyUI 额外模型路径配置
+#
+# 此配置文件用于告诉 ComfyUI 从本地高速缓存目录加载模型
+# 将此文件复制到 ComfyUI 根目录并重命名为 extra_model_paths.yaml
+#
+# 使用方法:
+#   cp extra_model_paths.yaml.template /workspace/ComfyUI/extra_model_paths.yaml
+#
+# 路径优先级说明:
+#   ComfyUI 会按配置顺序查找模型，本地缓存路径优先于默认路径
+#   这意味着如果模型已被预热到本地 NVMe，将优先从高速存储加载
+
+# RunPod 本地 NVMe 高速缓存配置
+# 此路径使用 Pod 的本地 SSD，读写速度极快
+# 注意: Pod 重启后此目录会被清空，需要重新预热
+runpod_local_nvme:
+    base_path: /root/fast_cache
+    # 以下子目录与 ComfyUI 默认 models 目录结构一致
+    checkpoints: checkpoints
+    loras: loras
+    vae: vae
+    controlnet: controlnet
+    upscale_models: upscale_models
+    embeddings: embeddings
+    clip: clip
+    unet: unet
+    diffusion_models: diffusion_models
+    clip_vision: clip_vision
+    style_models: style_models
+    gligen: gligen
+    hypernetworks: hypernetworks
+    photomaker: photomaker
+    instantid: instantid
+    ipadapter: ipadapter
+    insightface: insightface
+    facerestore_models: facerestore_models
+    ultralytics: ultralytics
+    ultralytics_bbox: ultralytics/bbox
+    ultralytics_segm: ultralytics/segm
+    sams: sams
+    onnx: onnx
+    mmdets: mmdets
+    mmdets_bbox: mmdets/bbox
+    mmdets_segm: mmdets/segm
+
+# 如果你有其他自定义模型路径，可以在此添加
+# 例如，外部 HDD 或其他共享存储
+# external_storage:
+#     base_path: /mnt/external_models
+#     checkpoints: checkpoints
+#     loras: loras
+

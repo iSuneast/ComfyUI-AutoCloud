@@ -106,4 +106,17 @@ https://github.com/iSuneast/ComfyUI-WebhookNotifier.git
 
 - 仅在安全的网络环境中使用
 - 不使用时请及时停止服务器（Ctrl+C）
-- 如需公网访问，请配置适当的防火墙规则 
+- 如需公网访问，请配置适当的防火墙规则
+
+## RunPod 模型预热
+
+针对 RunPod 生产环境的模型预热功能，通过将高频使用的模型从慢速 Volume 存储复制到本地 NVMe SSD，实现秒级模型加载。
+
+详细文档请查看 [runpod/README.md](runpod/README.md)
+
+### 快速开始
+
+```bash
+# 在 RunPod Template 中配置启动命令
+bash /workspace/ComfyUI-AutoCloud/runpod/start_with_warmup.sh
+```
