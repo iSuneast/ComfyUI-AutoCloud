@@ -28,6 +28,37 @@ set -e
 
 # 获取脚本所在目录的绝对路径
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 获取项目根目录 (脚本在 runpod 子目录下)
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# 获取项目同级目录
+PROJECT_PARENT_DIR="$(cd "$PROJECT_DIR/.." && pwd)"
+
+# === 自动检测 ComfyUI 路径 ===
+auto_detect_comfyui() {
+    # 如果已设置环境变量且目录存在，直接返回
+    if [ -n "$COMFYUI_PATH" ] && [ -d "$COMFYUI_PATH" ]; then
+        return
+    fi
+    
+    # 检测顺序：
+    # 1. 默认 RunPod 路径: /workspace/ComfyUI
+    # 2. 项目同级目录: ../ComfyUI (相对于项目根目录)
+    
+    local default_path="/workspace/ComfyUI"
+    local sibling_path="$PROJECT_PARENT_DIR/ComfyUI"
+    
+    if [ -d "$default_path" ]; then
+        COMFYUI_PATH="$default_path"
+    elif [ -d "$sibling_path" ]; then
+        COMFYUI_PATH="$sibling_path"
+    else
+        # 保持默认值，后续会在 check_environment 中报错
+        COMFYUI_PATH="${COMFYUI_PATH:-/workspace/ComfyUI}"
+    fi
+}
+
+# 执行自动检测
+auto_detect_comfyui
 
 # === 配置区域 ===
 # 可通过环境变量覆盖
@@ -113,6 +144,9 @@ check_environment() {
     # 检查 ComfyUI 路径
     if [ ! -d "$COMFYUI_PATH" ]; then
         log_error "ComfyUI 目录不存在: $COMFYUI_PATH"
+        log_info "已尝试以下路径:"
+        log_info "  - /workspace/ComfyUI (RunPod 默认路径)"
+        log_info "  - $PROJECT_PARENT_DIR/ComfyUI (项目同级目录)"
         log_info "请设置 COMFYUI_PATH 环境变量指向正确路径"
         exit 1
     fi
