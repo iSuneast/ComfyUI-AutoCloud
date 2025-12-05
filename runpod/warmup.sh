@@ -111,11 +111,11 @@ log_header() {
 format_size() {
     local size=$1
     if [ $size -ge 1073741824 ]; then
-        echo "$(echo "scale=2; $size/1073741824" | bc)GB"
+        echo "$(awk "BEGIN {printf \"%.2f\", $size/1073741824}")GB"
     elif [ $size -ge 1048576 ]; then
-        echo "$(echo "scale=2; $size/1048576" | bc)MB"
+        echo "$(awk "BEGIN {printf \"%.2f\", $size/1048576}")MB"
     elif [ $size -ge 1024 ]; then
-        echo "$(echo "scale=2; $size/1024" | bc)KB"
+        echo "$(awk "BEGIN {printf \"%.2f\", $size/1024}")KB"
     else
         echo "${size}B"
     fi
@@ -378,8 +378,8 @@ copy_file() {
     
     if cp "$actual_src" "$dest" 2>/dev/null; then
         local end_time=$(date +%s.%N)
-        local duration=$(echo "$end_time - $start_time" | bc)
-        local speed=$(echo "scale=2; $file_size / $duration / 1048576" | bc 2>/dev/null || echo "N/A")
+        local duration=$(awk "BEGIN {printf \"%.3f\", $end_time - $start_time}")
+        local speed=$(awk "BEGIN {printf \"%.2f\", $file_size / $duration / 1048576}" 2>/dev/null || echo "N/A")
         
         log_success "复制完成: $relative_path (${duration}s, ${speed}MB/s)"
         COPIED_FILES=$((COPIED_FILES + 1))
@@ -483,7 +483,7 @@ do_warmup() {
     echo "  总大小:     $(format_size $TOTAL_SIZE)"
     echo "  耗时:       ${total_time}s"
     if [ $total_time -gt 0 ] && [ $TOTAL_SIZE -gt 0 ]; then
-        local avg_speed=$(echo "scale=2; $TOTAL_SIZE / $total_time / 1048576" | bc 2>/dev/null || echo "N/A")
+        local avg_speed=$(awk "BEGIN {printf \"%.2f\", $TOTAL_SIZE / $total_time / 1048576}" 2>/dev/null || echo "N/A")
         echo "  平均速度:   ${avg_speed}MB/s"
     fi
     echo ""
