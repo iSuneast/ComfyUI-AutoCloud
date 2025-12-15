@@ -178,22 +178,11 @@ setup_extra_model_paths() {
     local yaml_file="$COMFYUI_PATH/extra_model_paths.yaml"
     local template_file="$CONFIG_DIR/extra_model_paths.yaml.template"
     
-    if [ -f "$yaml_file" ]; then
-        # 检查是否已包含本地缓存配置
-        if grep -q "runpod_local_nvme" "$yaml_file" 2>/dev/null; then
-            log_info "extra_model_paths.yaml 已配置本地缓存路径"
-            return 0
-        else
-            log_warning "extra_model_paths.yaml 已存在但未包含本地缓存配置"
-            log_info "正在备份并更新..."
-            cp "$yaml_file" "${yaml_file}.backup.$(date +%Y%m%d_%H%M%S)"
-        fi
-    fi
-    
+    # 每次都从模板更新，确保配置始终是最新的
     # 创建或更新配置文件
     if [ -f "$template_file" ]; then
         cp "$template_file" "$yaml_file"
-        log_success "已从模板创建 extra_model_paths.yaml"
+        log_success "已从模板更新 extra_model_paths.yaml"
     else
         # 生成默认配置
         cat > "$yaml_file" << 'EOF'
