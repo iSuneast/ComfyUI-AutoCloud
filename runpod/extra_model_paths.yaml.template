@@ -44,6 +44,37 @@ runpod_local_nvme:
     mmdets_bbox: mmdets/bbox
     mmdets_segm: mmdets/segm
 
+# ComfyUI 默认 models 目录
+# 必须显式配置，否则某些模型可能无法被扫描到
+comfyui_default:
+    base_path: /workspace/runpod-slim/ComfyUI/models
+    checkpoints: checkpoints
+    loras: loras
+    vae: vae
+    controlnet: controlnet
+    upscale_models: upscale_models
+    embeddings: ../models/embeddings
+    clip: clip
+    unet: unet
+    diffusion_models: diffusion_models
+    clip_vision: clip_vision
+    style_models: style_models
+    gligen: gligen
+    hypernetworks: hypernetworks
+    photomaker: photomaker
+    instantid: instantid
+    ipadapter: ipadapter
+    insightface: insightface
+    facerestore_models: facerestore_models
+    ultralytics: ultralytics
+    ultralytics_bbox: ultralytics/bbox
+    ultralytics_segm: ultralytics/segm
+    sams: sams
+    onnx: onnx
+    mmdets: mmdets
+    mmdets_bbox: mmdets/bbox
+    mmdets_segm: mmdets/segm
+
 # 如果你有其他自定义模型路径，可以在此添加
 # 例如，外部 HDD 或其他共享存储
 # external_storage:
