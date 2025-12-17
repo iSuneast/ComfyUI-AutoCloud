@@ -29,8 +29,9 @@ CONFIG_FILE=$(realpath "$CONFIG_FILE")
 
 echo "Starting installation of ComfyUI nodes from config: $(basename "$CONFIG_FILE")..."
 
-# Set ComfyUI installation directory
-COMFYUI_DIR="$HOME/ComfyUI"
+# Set ComfyUI installation directory (default: sibling directory of this project)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+COMFYUI_DIR="$(dirname "$SCRIPT_DIR")/ComfyUI"
 CUSTOM_NODES_DIR="$COMFYUI_DIR/custom_nodes"
 
 # Check if ComfyUI directory exists
